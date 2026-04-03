@@ -1,0 +1,59 @@
+.gradle
+build/
+gradle
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### IntelliJ IDEA ###
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### Kotlin ###
+.kotlin
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+/gradlew
+/gradlew.bat
+/.idea/libraries/Kotlin_Native__builtin___mingw_x64.xml
+/.idea/libraries/Kotlin_Native__gdiplus___mingw_x64.xml
+/.idea/libraries/Kotlin_Native__iconv___mingw_x64.xml
+/.idea/libraries/Kotlin_Native__opengl32___mingw_x64.xml
+/.idea/libraries/Kotlin_Native__posix___mingw_x64.xml
+/.idea/libraries/Kotlin_Native__stdlib.xml
+/.idea/libraries/Kotlin_Native__windows___mingw_x64.xml
+/.idea/libraries/Kotlin_Native__winhttp___mingw_x64.xml
+/.idea/libraries/Kotlin_Native__zlib___mingw_x64.xml
+/.idea/amplicode-jpa.xml
+/.idea/vcs.xml
+/.idea/workspace.xml
