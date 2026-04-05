@@ -2,20 +2,24 @@
 
 package org.example
 
+import kotlinx.io.buffered
+import kotlinx.io.files.SystemFileSystem
+import kotlinx.io.readLine
 import kotlin.experimental.ExperimentalNativeApi
-import kotlin.io.path.*
+import kotlinx.io.files.Path as KxPath
 import kotlin.random.Random
+
 
 // Словари для генерации случайных имен
 val DIGITS = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
 val COLORS = listOf("red", "blue", "green", "yellow", "purple", "orange", "pink", "brown", "black", "white")
 val BIRDS = listOf("eagle", "owl", "sparrow", "robin", "penguin", "parrot", "hawk", "swan", "peacock", "flamingo")
 
-fun main() {
+fun main2() {
     println("File Renamer started...")
     
     // Чтение конфигурации из ini-файла
-    val configPath = Path("config.ini")
+    val configPath = KxPath("config.ini")
     val folderPath = readConfig(configPath)
     
     if (folderPath == null) {
@@ -23,16 +27,18 @@ fun main() {
         return
     }
     
-    val folder = Path(folderPath)
+    val folder = KxPath(folderPath)
     
     // Проверка существования папки
-    if (!folder.exists()) {
+    if (!SystemFileSystem.exists(folder)) {
         println("Error: Folder does not exist: $folderPath")
         return
     }
-    
-    // Получение списка файлов в папке
-    val files = folder.listDirectoryEntries().filter { it.isRegularFile }
+
+    // Получение списка файлов (упрощённо — только имена)
+    val files = SystemFileSystem.list(folder).filter {
+        SystemFileSystem.metadataOrNull(it)?.isRegularFile == true
+    }
     
     if (files.isEmpty()) {
         println("No files found in the folder")
@@ -45,11 +51,12 @@ fun main() {
     var renamedCount = 0
     for (file in files) {
         val newName = generateRandomName()
-        val newFilePath = folder.resolve("$newName${file.extension}")
+        val extension = file.name.substringAfterLast(".", "")
+        val newFilePath = KxPath(folder, "$newName.$extension")
         
         try {
-            file.moveTo(newFilePath)
-            println("Renamed: ${file.name} -> $newName${file.extension}")
+            SystemFileSystem.atomicMove(source = file, destination = newFilePath)
+            println("Renamed: ${file.name} -> $newName")
             renamedCount++
         } catch (e: Exception) {
             println("Error renaming file ${file.name}: ${e.message}")
@@ -60,25 +67,31 @@ fun main() {
 }
 
 // Функция для чтения конфигурации из ini-файла
-fun readConfig(configPath: Path): String? {
-    if (!configPath.exists()) {
+@OptIn(ExperimentalStdlibApi::class)
+fun readConfig(configPath: KxPath): String? {
+    if (!SystemFileSystem.exists(configPath)) {
         println("Config file not found: $configPath")
         return null
     }
-    
-    try {
-        val lines = configPath.readLines()
-        for (line in lines) {
-            if (line.startsWith("folder_path=")) {
-                return line.substringAfter("=").trim()
+
+    return try {
+        SystemFileSystem.source(configPath).buffered().use { source ->
+            // Читаем строки одну за другой, пока не найдем нужную или файл не кончится
+            var result: String? = null
+            while (true) {
+                val line = source.readLine() ?: break // Выход из цикла, если файл кончился
+                if (line.startsWith("folder_path=")) {
+                    result = line.substringAfter("=").trim()
+                    break
+                }
             }
+            result
         }
-        println("folder_path not found in config file")
-        return null
     } catch (e: Exception) {
         println("Error reading config file: ${e.message}")
-        return null
+        null
     }
+
 }
 
 // Функция для генерации случайного имени файла

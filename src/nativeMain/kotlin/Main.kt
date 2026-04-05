@@ -11,4 +11,6 @@ fun main() {
     val platform = Platform.osFamily
     println("Running on: $platform")
 
+    main2()
+
 }
