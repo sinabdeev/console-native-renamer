@@ -89,7 +89,7 @@ build/bin/mingwX64/ReleaseExecutable/
 В той же папке, где лежит `.exe`, создайте файл `config.ini`:
 
 ```ini
-folder_path=C:/Users/kepler/Pictures/ToRename
+folder_path=C:/Users/user/Pictures/ToRename
 ```
 
 > 💡 Используйте прямые слеши `/` или двойные обратные `\\` в путях Windows.
@@ -98,7 +98,7 @@ folder_path=C:/Users/kepler/Pictures/ToRename
 
 Убедитесь, что в указанной папке есть файлы:
 ```
-C:/Users/kepler/Pictures/ToRename/
+C:/Users/user/Pictures/ToRename/
 ├── photo1.jpg
 ├── document.pdf
 └── video.mp4
@@ -136,7 +136,7 @@ Renaming completed. 3 files renamed.
 **Пример полного конфига:**
 ```ini
 # Конфигурация File Renamer
-folder_path=C:/Users/kepler/Documents/RenameTest
+folder_path=C:/Users/user/Documents/RenameTest
 ```
 
 > 📝 Программа ищет `config.ini` в **текущей рабочей директории** (откуда запущена).
