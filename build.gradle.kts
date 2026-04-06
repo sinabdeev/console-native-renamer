@@ -19,7 +19,7 @@ kotlin {
     nativeTarget.binaries {
         executable {
             entryPoint = "org.example.main"
-            baseName = "MyNativeApp"
+            baseName = "FileRenamer"
         }
     }
 
